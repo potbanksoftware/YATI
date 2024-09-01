@@ -69,6 +69,7 @@ var _map_wangset_to_terrain = false
 var _add_class_as_metadata = false
 var _add_id_as_metadata = false
 var _dont_use_alternative_tiles = false
+var _center_tilemap = false
 var _object_groups
 var _ct: CustomTypes = null
 
@@ -134,6 +135,10 @@ func set_map_wangset_to_terrain(value: bool):
 
 func set_custom_types(ct: CustomTypes):
 	_ct = ct
+
+
+func set_center_tilemap(value: bool):
+	_center_tilemap = value
 
 
 func get_tileset():
@@ -329,7 +334,10 @@ func handle_layer(layer: Dictionary, parent: Node2D):
 			# Data
 			var data = handle_data(layer["data"], _map_width * _map_height)
 			if data != null:
-				create_map_from_data(data, 0, 0, _map_width)
+				if _center_tilemap:
+					create_map_from_data(data, -_map_width/2, -_map_height/2, _map_width)
+				else:
+					create_map_from_data(data, 0, 0, _map_width)
 
 		if layer.has("properties"):
 			handle_properties(_tilemap, layer["properties"])
